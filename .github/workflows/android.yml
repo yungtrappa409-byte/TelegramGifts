@@ -1,0 +1,33 @@
+name: Build TelegramGifts APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      - name: Build APK
+        run: ./gradlew assembleAfatRelease
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: TelegramGifts-APK
+          path: "**/*.apk"
